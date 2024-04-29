@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question creator</title>
+    <link href="{%static 'survey-creator/style.css'%}" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+    <script src="{%static 'survey-creator/scroll-buttons.js'%}" defer></script>
+    <script src="{%static 'survey-creator/title-desc.js'%}" defer></script>
+    <script src="{%static 'survey-creator/grp-selector.js'%}" defer></script>
+    <script src="{%static 'survey-creator/drag-and-sort.js'%}" defer></script>
+    <script src="{%static 'survey-creator/create-survey.js'%}" defer></script>
+    <script src="{%static 'survey-creator/anim.js'%}" defer></script>
+    <script src="{%static 'survey-creator/save-export.js'%}" defer></script>
+    
+
+    
+</head>
+
+<body>
+    <section id="pageTop"></section>
+    <div id="d-main">
+        <div id="title-desc" class="no-select">
+            <div id="title">
+                <textarea type="text" id="ip-title" class="ip-field" spellcheck="false" placeholder="Title" rows="1" cols="100" oninput="adjustRows(this)" wrap="hard"></textarea>
+            </div>
+            <hr class="line">
+            <div id="desc">
+                <textarea id="ip-desc" class="ip-field" spellcheck="false" rows="1" cols="200" placeholder="Survey description" oninput="adjustRows(this)"></textarea>
+                <!-- <input type="text" id="ip-desc" class="ip-field" size="120" placeholder="Survey Description"> -->
+            </div>
+        </div>
+        <div  id="group-selector-parent" class="modern-ui">
+            <div id="g-s-title" class="no-select">Select Groups for which survey will be conducted :</div>
+            <hr class="line">
+            <div class="modern-ui" id="group-selector">
+                {%for g in group %}
+            <div class="groups">{{g}}</div>
+            {% endfor %}
+            </div>
+        </div>
+        <div id="q-creator" class="modern-ui">
+            <div id="questions-list" >
+
+                <!-- <div class="questions" data-q-number="1">
+                    <textarea type="text" class="ip-field" placeholder="Write Q" rows="1" cols="1000" oninput="adjustRows(this)" wrap="hard"></textarea>
+                    <div class="mcq-parent">
+                        <div class="anim-button no-border"  data-isPlaying="false">1<div class="circles"></div></div>
+                        <div class="anim-button" data-isPlaying="false">2<div class="circles"></div></div>
+                        <div class="anim-button" data-isPlaying="false">3<div class="circles"></div></div>
+                        <div class="anim-button" data-isPlaying="false">4<div class="circles"></div></div>
+                        <div class="anim-button" data-isPlaying="false">5<div class="circles"></div></div>
+
+
+                    </div>
+                    <div class="q-options"></div>
+                </div> -->
+
+                
+
+            </div>
+            <div id="tools-panel"></div>
+        </div>
+        <section id="pageBottom"></section>
+        <button id="create-button" class="anim-button" onclick="createSurvey()">Create Survey<div class="circles"></div></button>
+        <div style="opacity:0;cursor:inherit;user-select: none;">.</div>
+
+    </div>
+    
+    <button id="scrollToTopBtn" class="scroll-buttons" onclick="smoothScroll('#pageTop')"></button>
+    <button id="scrollToBottomBtn" class="scroll-buttons" onclick="smoothScroll('#pageBottom')"></button>
+    <form method="post" id="submit-data-form">
+        {%csrf_token%}
+        {% comment %} <div style="display:none;" id="csrf">{{ csrf_token }}<div> {% endcomment %}
+        <input type="text" name="json" style="display: none;">
+    </form>
+
+</body>
+
+</html>

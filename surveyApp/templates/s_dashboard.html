@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'student-dash/s_dash_style.css'%}">
+    <script src="{% static 'student-dash/survey-redirect.js'%}" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
+    <script src="{% static 'student-dash/survey-redirect.js'%}" defer></script>
+    <script src="{% static 'student-dash/anim.js'%}" defer></script>
+    <script src="{% static 'student-dash/logout.js'%}" defer></script>
+</head>
+<body>
+    <div id="master-div">
+        <div id="survey-container">
+            {% if surveys|length == 0%}
+            <div >No Survey</div>
+            {%endif%}
+            {% for entry in surveys %}
+            <form method="post" class="survey-element" onclick="submitForm(this)">
+                <input type="text" name="survey-id" value="{{ entry.pk }}" style="display: none;">
+           <div class="survey-text" > {{ entry.fields.survey_name }}</div>
+           {% csrf_token %}
+           </form>
+           {% endfor %}
+        </div>
+        <button id="button-div" class="anim-button"  data-isPlaying="false" onclick="logout()">Logout<div class="circles"></div></button>
+    </div>
+</body>
+</html>

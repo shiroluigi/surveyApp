@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    {%load static%}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response</title>
+    <link rel="stylesheet" href="{% static 'survey_response/response-style.css'%}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
+    <script src="{% static 'survey_response/anim.js'%}" defer></script>
+    <script src="{% static 'survey_response/button-selector.js'%}" defer></script>
+    <script src="{% static 'survey_response/close-instruction.js'%}" defer></script>
+    <script src="{% static 'survey_response/submit-response.js'%}" defer></script>
+</head>
+<body>
+    <div id="master-div">
+        <div id="title-desc">
+            {%for items in survey%}
+            <div id="title">{{items.fields.survey_name}}</div>
+            <div id="desc">{{items.fields.survey_description}}</div>
+            {%endfor%}
+        </div>
+        <div id="instructions">
+            <div id="close-instructions" onclick="closeDiv()"></div>
+            <h1>How to Rate Your Experience:</h1>
+
+            We want to ensure your feedback is accurate and meaningful. Please use the following rating scale to express your level of satisfaction:
+            <ul>
+                <li>
+                    <strong>1: Strongly Dissatisfied</strong>
+                    <p>Your experience fell significantly short of expectations, indicating the lowest level of satisfaction.</p>
+                </li>
+                <li>
+                    <strong>2: Dissatisfied</strong>
+                    <p>Your experience did not meet expectations and left you feeling dissatisfied.</p>
+                </li>
+                <li>
+                    <strong>3: Neutral</strong>
+                    <p>You feel neither particularly satisfied nor dissatisfied, indicating a neutral stance.</p>
+                </li>
+                <li>
+                    <strong>4: Satisfied</strong>
+                    <p>Your experience met expectations and left you feeling satisfied.</p>
+                </li>
+                <li>
+                    <strong>5: Very Satisfied</strong>
+                    <p>Your experience exceeded expectations, providing an exceptional experience.</p>
+                </li>
+            </ul>
+            <p><span style="color: red;">*</span> Please note: If you do not select any option, it will be considered as <strong>Neutral</strong>.</p>
+        </div>
+        <div id="question-container">
+            
+
+
+
+
+
+            {% for items in questions %}
+            <div class="questions" data-qid="{{items.id}}">
+                <div class="question-text" wrap="hard">{{items.question}}</div>
+                <div class="mcq-parent">
+                    <div class="anim-button no-border"  data-isPlaying="false">1<div class="circles"></div></div>
+                    <div class="anim-button" data-isPlaying="false">2<div class="circles"></div></div>
+                    <div class="anim-button selected" data-isPlaying="false">3<div class="circles"></div></div>
+                    <div class="anim-button" data-isPlaying="false">4<div class="circles"></div></div>
+                    <div class="anim-button" data-isPlaying="false">5<div class="circles"></div></div>
+                </div>
+            </div>
+            {% endfor%}
+
+        
+        
+        </div>
+        
+        <button id="submit-button" class="anim-button" onclick="submitResponse()">Create Survey<div class="circles"></div></button>
+
+    </div>
+    <form method="post" id="submit-response-form">
+        {%csrf_token%}
+        {% comment %} <div style="display:none;" id="csrf">{{ csrf_token }}<div> {% endcomment %}
+        <input type="text" id="response-data" name="json" style="display: none;">
+    </form>
+</body>
+</html>

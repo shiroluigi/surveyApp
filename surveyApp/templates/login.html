@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSS</title>
+    <link href="static/login/style1.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
+    <script src="static/login/login-page-script.js" defer></script>
+    {% comment %} <script src="static/login/toogle-stuff.js" defer></script> {% endcomment %}
+    <script src="static/login/submit-data.js" defer></script>
+    
+</head>
+
+<body>
+    <div id="d-main">
+    <div id="d2">
+        <div class="slideshow-container">
+            <div class="mySlides">
+              <img src="static/login/image1.gif" class="slideshow-img">
+            </div>
+          
+            <div class="mySlides">
+              <img src="static/login/image2.jpg" class="slideshow-img">
+            </div>
+          
+            <div class="mySlides">
+              <img src="static/login/image3.jpg" class="slideshow-img">
+            </div>
+          
+            <!-- Add more slides as needed -->
+          
+            <div class="dot-container">
+              <span class="dot" ></span>
+              <span class="dot" ></span>
+              <span class="dot" ></span>
+              <!-- Add more dots as needed -->
+            </div>
+          </div>
+          
+
+    </div>
+    <div id="d3">
+    <div id="d1">
+        <div id="company-stuff">
+        <div id="heading">
+        <div id="company-first-name">
+        <div class="anim-mask"><div id="part1">Campus</div></div>
+        <div class="anim-mask"><div id="part2">Flow</div></div>
+        </div>
+        <div id="company-last-name">
+        <div class="last-name-letters">A</div><div class="last-name-letters">n</div><div class="last-name-letters">a</div><div class="last-name-letters">l</div><div class="last-name-letters">y</div><div class="last-name-letters">t</div><div class="last-name-letters">i</div><div class="last-name-letters">c</div><div class="last-name-letters">s</div>
+        </div>
+        </div>
+        <!-- <div id="moto"> -->
+        <div id="company-tagline">Navigating Excellence, One Survey at a Time.</div>
+        <!-- </div> -->
+        </div>
+        <div id="form">
+          <form id="main-form" method="post" action="">
+            {% csrf_token %}
+            <div class="ip-divs"><label for="user-id" class="lables">User Id</label></div>
+            <div class="ip-divs"><input autocomplete="off" type="text" name="u-id" id="user-id" class="ip-field" placeholder="Enter User Id as provided by your Institution" required></div>
+            <div class="ip-divs"><label for="user-password" class="lables">Password</label></div>
+            <div class="ip-divs"><input autocomplete="off" type="password" name="u-pass" id="user-password" class="ip-field" placeholder="Enter password" required></div>
+            <div class="ip-divs" style="display:block;" id="error-div" name="error-msg">{{message}}</div>
+            <!-- <div class="ip-divs" id="button-div"><input type="submit" value="Sign In" id="sign-in-button"></div> -->
+            <input type="text" value="student" id="toogle" name="typeoflogin">
+            {% comment %} <div id="toogle-container">
+              <div id="t-highlighter"></div>
+              <button type="button" id="tb1" class="t-button" onclick="moveLeft()">Student</button>
+              <button type="button" id="tb2" class="t-button" onclick="moveRight()">Institute</button>
+            </div> {% endcomment %}
+            <div class="ip-divs"><button type="submit" id="button-div" class="anim-button"  data-isPlaying="false">Submit <div class="circles"></div></button></div>
+          </form>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script src="static/login/company-stuff.js" defer></script>
+</body>
+
+</html>
