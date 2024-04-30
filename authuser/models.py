@@ -33,9 +33,6 @@ class Institute(AbstractBaseUser):
     class Meta:
         permissions = [('is_institute', 'Is Institute')]
 
-    # # Resolve clash for groups and user_permissions
-    # groups = models.ManyToManyField('auth.Group', related_name='institute_group_set', blank=True, verbose_name="Groups")
-    # user_permissions = models.ManyToManyField('auth.Permission', related_name='institute_permission_set', blank=True, verbose_name="User Permissions")
 
 class StudentManager(BaseUserManager):
     def create_user(self, user_id, username, password=None, **extra_fields):
@@ -58,9 +55,6 @@ class Student(AbstractBaseUser):
     class Meta:
         permissions = [('is_student', 'Is Student')]
 
-    # # Add a related_name argument to resolve the clash for groups and user_permissions
-    # groups = models.ManyToManyField('auth.Group', related_name='student_set', blank=True, verbose_name="Groups")
-    # user_permissions = models.ManyToManyField('auth.Permission', related_name='student_set', blank=True, verbose_name="User Permissions")
 
 
 class groups_table(models.Model):
@@ -70,25 +64,19 @@ class groups_table(models.Model):
     class Meta:
         unique_together = ('institute','groups')
     def __str__(self):
-        return f"{self.groups}-{self.institute}"
+        return f"Group: {self.groups}, Institute: {self.institute}"
 
 class Survey(models.Model):
     survey_name=models.CharField(null=False,max_length=100)
     survey_description = models.CharField(null=False,max_length=10000,default="")
     institute = models.ForeignKey(Institute, on_delete=models.CASCADE)
     group = models.ManyToManyField(groups_table)
-    #TODO ADD DATE FOR SORTING
     def __str__(self):
         return f"{self.survey_name}"
 
 class Question(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    question = models.CharField(max_length=10000,null=False)
-    ch_1 = models.IntegerField(default=0)
-    ch_2 = models.IntegerField(default=0)
-    ch_3 = models.IntegerField(default=0)
-    ch_4 = models.IntegerField(default=0)
-    ch_5 = models.IntegerField(default=0)
+    question = models.CharField(max_length=10000,null=False,blank=False)
 
 class SGroup(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -98,7 +86,7 @@ class SGroup(models.Model):
         unique_together = ('student', 'group')
 
     def __str__(self):
-        return f"{self.student}-{self.group}"
+        return f"Student: {self.student}, Group: {self.group}"
     
 class student_attending_survey(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -109,8 +97,7 @@ class student_responses(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    #this need to be 1 to 5
     choice = models.IntegerField()
 
     def __str__(self):
-        return f"{self.survey}-{self.student}-{self.question}-{self.choice}"
+        return f"Survey: {self.survey}, Student: {self.student}, Question: {self.question}, Choice: {self.choice}"

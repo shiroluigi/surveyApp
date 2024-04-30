@@ -103,18 +103,18 @@ def answer_survey(request,sid):
         qlist = json.loads(request.POST.get('json'))
         student_attending_survey.objects.create(student=request.user, survey=Survey.objects.get(id=sid))
         for q in qlist:
-            qob = Question.objects.get(id=q)
-            if qlist[q] == 1:
-                qob.ch_1 += 1
-            elif qlist[q] == 2:
-                qob.ch_2 += 1
-            elif qlist[q] == 3:
-                qob.ch_3 += 1
-            elif qlist[q] == 4:
-                qob.ch_4 += 1
-            elif qlist[q] == 5:
-                qob.ch_5 += 1
-            qob.save()
+            # qob = Question.objects.get(id=q)
+            # if qlist[q] == 1:
+            #     qob.ch_1 += 1
+            # elif qlist[q] == 2:
+            #     qob.ch_2 += 1
+            # elif qlist[q] == 3:
+            #     qob.ch_3 += 1
+            # elif qlist[q] == 4:
+            #     qob.ch_4 += 1
+            # elif qlist[q] == 5:
+            #     qob.ch_5 += 1
+            # qob.save()
             student_responses.objects.create(survey=Survey.objects.get(id=sid), student=request.user, question=Question.objects.get(id=q), choice=qlist[q])
         request.session.pop('sid', None)
         return HttpResponseRedirect("/")
@@ -175,18 +175,23 @@ def analysis(request,sid):
     qo = Question.objects.filter(survey=so)
     survey_data = {}
     data_inside = {}
+    total_json = {}
+    total_responses = 0
     # for all question 
     for q in qo:
         responses = []
         student_ans = student_responses.objects.filter(survey=so,question=q)
         for sa in student_ans:
             responses.append(sa.choice)
-        print(responses)
+            total_responses += 1
+        # print(responses)
         data_inside = {}
         data_inside['question_content'] = q.question
         data_inside['response'] = responses
         survey_data['{0}'.format(q.id)] = data_inside
-    print(survey_data)
+    # calculate percentage response
+    # Create JSON of only question contents with response percentages
+    
     
     overall_satisfaction = calculate_overall_satisfaction(survey_data)
     # Calculate coefficients of impact for each question
@@ -205,11 +210,38 @@ def analysis(request,sid):
             "coefficient_of_impact": impact_coefficients[qid],
             "mean_response": mean_response
         }
-
+    total_json['name'] = so.survey_name 
+    total_json['desc'] = so.survey_description
+    total_json['total'] = total_responses
+    total_json['mean'] = overall_satisfaction
     # Print the JSON and overall satisfaction
-    print("JSON containing coefficients of impact for each question:")
-    print(json.dumps(result_json, indent=4))
-    print("\nOverall Satisfaction:", overall_satisfaction)
-    print("Question with the highest impact:", max_impact_question)
+    # print("JSON containing coefficients of impact for each question:")
+    # print(json.dumps(result_json, indent=4))
+    # print("\nOverall Satisfaction:", overall_satisfaction)
+    # print("Question with the highest impact:", max_impact_question)
+    result_jsonS = json.dumps(result_json)
+    question_contents_json = []
+    for qid in result_json:
+        question_contents_json.append({"q_content": result_json[qid]["question_content"]})
+    question_contents_with_percentages_json = []
+    for qid in result_json:
+        responses = survey_data[qid]["response"]
+        total_responses = len(responses)
+        response_counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        for response in responses:
+            response_counts[response] += 1
+        response_percentages = {value: (count / total_responses) * 100 for value, count in response_counts.items()}
         
-    return render(request,"report.html")
+        # Construct JSON object for the current question
+        question_json = {
+            "q_content": result_json[qid]["question_content"],
+            "response_percentages": response_percentages
+        }
+        # Append JSON object to the list
+        question_contents_with_percentages_json.append(question_json)
+
+    # # Print JSON of question contents with response percentages
+    # print("JSON containing question contents with response percentages:")
+    # print(json.dumps(question_contents_with_percentages_json, indent=4))
+    # print(question_contents_with_percentages_json)
+    return render(request,"report.html",{'resultO' : question_contents_with_percentages_json , 'resultS' : result_jsonS , 'div_values' : total_json })

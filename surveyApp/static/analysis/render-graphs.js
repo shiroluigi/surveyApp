@@ -5,58 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function renderImportanceGraph(){
 
-    var jsonData={
-        "Q1": {
-            "question_content": "How satisfied are you with the quality of the product?",
-            "coefficient_of_impact": -0.01818181818181791,
-            "mean_response": 3.9
-        },
-        "Q2": {
-            "question_content": "How satisfied are you with the delivery time?",
-            "coefficient_of_impact": -0.03636363636363621,
-            "mean_response": 3.2
-        },
-        "Q3": {
-            "question_content": "How satisfied are you with the customer service?",
-            "coefficient_of_impact": -0.024242424242424065,
-            "mean_response": 4.4
-        },
-        "Q4": {
-            "question_content": "How satisfied are you with the pricing?",
-            "coefficient_of_impact": -0.03636363636363621,
-            "mean_response": 3.2
-        },
-        "Q5": {
-            "question_content": "How satisfied are you with the user interface?",
-            "coefficient_of_impact": -0.024242424242424065,
-            "mean_response": 4.4
-        },
-        "Q6": {
-            "question_content": "How satisfied are you with the packaging?",
-            "coefficient_of_impact": -0.03636363636363621,
-            "mean_response": 3.2
-        },
-        "Q7": {
-            "question_content": "How satisfied are you with the shipping process?",
-            "coefficient_of_impact": -0.024242424242424065,
-            "mean_response": 4.4
-        },
-        "Q8": {
-            "question_content": "How satisfied are you with the payment process?",
-            "coefficient_of_impact": 3.3306690738754696e-16,
-            "mean_response": 5.0
-        },
-        "Q9": {
-            "question_content": "How satisfied are you with the variety of products?",
-            "coefficient_of_impact": -0.024242424242424065,
-            "mean_response": 4.4
-        },
-        "Q10": {
-            "question_content": "How satisfied are you with the after-sales service?",
-            "coefficient_of_impact": 0.07878787878787902,
-            "mean_response": 3.7
-        }
-    };
+    var jsonData=JSON.parse(String(document.getElementById('jsonDiv').innerHTML));
 
     var questionNumberLabels=[];
     for(let i=0;i<Object.keys(jsonData).length;i++){

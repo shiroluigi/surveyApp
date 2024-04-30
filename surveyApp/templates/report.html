@@ -19,7 +19,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
     <script src="{% static 'analysis/anim.js'%}" defer></script>
-    <script src="{% static 'analysis/render-graphs.js'%}" defer></script>
     <script src="{% static 'analysis/export-pdf.js'%}"></script>
     
 </head>
@@ -28,8 +27,8 @@
         <div id="master-div">
             <!-- <div id="print-stuff"> -->
             <div id="title-desc" class="modern-div">
-                <div id="td-title">Title</div>
-                <div id="td-desc">Desc</div>
+                <div id="td-title">{{div_values.name}}</div>
+                <div id="td-desc">{{div_values.desc}}</div>
             </div>
 
 
@@ -40,7 +39,7 @@
                     <!-- <img src="total-number-of-students-in-the-school-512.png" alt="total-students-icon"> -->
                     <div class="snippet-icon" id="tot-res"></div>
                     <div class="sinppet-info">
-                        <div class="snippet-info-value">5000</div>
+                        <div class="snippet-info-value">{{div_values.total}}</div>
                         <div class="snippet-info-title">Responses</div>
                     </div>
                 </div>
@@ -49,96 +48,37 @@
                     <!-- <img src="total-number-of-students-in-the-school-512.png" alt="total-students-icon"> -->
                     <div class="snippet-icon"id="avg-res"></div>
                     <div class="sinppet-info">
-                        <div class="snippet-info-value">3.7</div>
+                        <div class="snippet-info-value">{{div_values.mean}}</div>
                         <div class="snippet-info-title">Mean Response</div>
                     </div>
                 </div>
 
-                <div class="snippet-element modern-div">
+                {% comment %} <div class="snippet-element modern-div">
                     <!-- <img src="total-number-of-students-in-the-school-512.png" alt="total-students-icon"> -->
                     <div class="snippet-icon" id="date"></div>
                     <div class="sinppet-info">
                         <div class="snippet-info-value" style="font-size: xx-large;">3-08-2024</div>
                         <!-- <div class="snippet-info-title">Date</div> -->
                     </div>
-                </div>
+                </div> {% endcomment %}
 
             </div>
 
             <div id="questions-analysis" class="modern-div">
 
                 <div id="questions-list">
-
+                    {%for r in resultO %}
                     <div class="questions" data-qid="234">
-                        <div class="question-text" wrap="hard">rfffccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccffddfffffffffffffffffffffffffffffffffffffff</div>
+                        <div class="question-text" wrap="hard">{{r.q_content}}</div>
                         <div class="mcq-parent">
-                            <div class="o1">10%</div>
-                            <div class="o2">30%</div>
-                            <div class="o3">40%</div>
-                            <div class="o4">5%</div>
-                            <div class="o5">15%</div>
+                            <div class="o1">{{r.response_percentages.1}} %</div>
+                            <div class="o2">{{r.response_percentages.2}} %</div>
+                            <div class="o3">{{r.response_percentages.3}} %</div>
+                            <div class="o4">{{r.response_percentages.4}} %</div>
+                            <div class="o5">{{r.response_percentages.5}} %</div>
                         </div>
                     </div>
-
-                    <div class="questions" data-qid="234">
-                        <div class="question-text" wrap="hard">rfffccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccffddfffffffffffffffffffffffffffffffffffffff</div>
-                        <div class="mcq-parent">
-                            <div class="o1">10%</div>
-                            <div class="o2">30%</div>
-                            <div class="o3">40%</div>
-                            <div class="o4">5%</div>
-                            <div class="o5">15%</div>
-                        </div>
-                    </div><div class="questions" data-qid="234">
-                        <div class="question-text" wrap="hard">rfffccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccffddfffffffffffffffffffffffffffffffffffffff</div>
-                        <div class="mcq-parent">
-                            <div class="o1">10%</div>
-                            <div class="o2">30%</div>
-                            <div class="o3">40%</div>
-                            <div class="o4">5%</div>
-                            <div class="o5">15%</div>
-                        </div>
-                    </div><div class="questions" data-qid="234">
-                        <div class="question-text" wrap="hard">rfffccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccffddfffffffffffffffffffffffffffffffffffffff</div>
-                        <div class="mcq-parent">
-                            <div class="o1">10%</div>
-                            <div class="o2">30%</div>
-                            <div class="o3">40%</div>
-                            <div class="o4">5%</div>
-                            <div class="o5">15%</div>
-                        </div>
-                    </div><div class="questions" data-qid="234">
-                        <div class="question-text" wrap="hard">rfffccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccffddfffffffffffffffffffffffffffffffffffffff</div>
-                        <div class="mcq-parent">
-                            <div class="o1">10%</div>
-                            <div class="o2">30%</div>
-                            <div class="o3">40%</div>
-                            <div class="o4">5%</div>
-                            <div class="o5">15%</div>
-                        </div>
-                    </div><div class="questions" data-qid="234">
-                        <div class="question-text" wrap="hard">rfffccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccffddfffffffffffffffffffffffffffffffffffffff</div>
-                        <div class="mcq-parent">
-                            <div class="o1">10%</div>
-                            <div class="o2">30%</div>
-                            <div class="o3">40%</div>
-                            <div class="o4">5%</div>
-                            <div class="o5">15%</div>
-                        </div>
-                    </div><div class="questions" data-qid="234">
-                        <div class="question-text" wrap="hard">rfffccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccffddfffffffffffffffffffffffffffffffffffffff</div>
-                        <div class="mcq-parent">
-                            <div class="o1">10%</div>
-                            <div class="o2">30%</div>
-                            <div class="o3">40%</div>
-                            <div class="o4">5%</div>
-                            <div class="o5">15%</div>
-                        </div>
-                    </div>
-
-
-
-
+                    {%endfor%}
                 </div>
             </div>
 
@@ -146,7 +86,8 @@
         <!-- </span> -->
             <button type="submit" id="button-div" class="anim-button"  data-isPlaying="false" onclick="exportPDF()">Export PDF<div class="circles"></div></button>
         </div>
-
+        <div id="jsonDiv" style="display:none;">{{resultS}}</div>
     <!-- </div> -->
+    <script src="{% static 'analysis/render-graphs.js'%}" defer></script>
 </body>
 </html>
