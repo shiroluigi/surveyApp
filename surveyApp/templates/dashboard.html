@@ -1,69 +1,3 @@
-{% comment %} <!DOCTYPE html>
-<html lang="en">
-{% load static%}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{user.institute_name}}</title>
-    <link rel="stylesheet" href="{%static 'dashboard/dashboard-style.css'%}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
-    <script src="{%static 'dashboard/settings_anim.js'%}" defer></script>
-    <script src="{%static 'dashboard/button-anim.js'%}" defer></script>
-    <script src="{%static 'dashboard/logout.js'%}" defer></script>
-</head>
-<body>
-    <div id="master-div">
-        <div id="left-div">
-            <div id="l-up">
-                <div id="profile-pic">
-                    <img src="/{{user.profile_pic}}" alt="Institute image">
-                </div>
-                <div id="welcome-msg">{{user.institute_id}}</div>
-            </div>
-            <div id="l-mid">
-                <div class="ins-info"><label >Number of surveys : </label><div id="no-of-surveys" >{{user.number_of_surveys}}</div></div>
-                <div class="ins-info"><label >Institute id : </label><div id="no-of-surveys" >{{user.institute_name}}</div></div>
-            </div>
-            <div id="l-down">
-                <!-- <div id="settings" class="icons"><a href=""><img class="logout-img" src="settings-512.png" alt="Settings"></a></div> -->
-                <div id="logout" class="icons"><a href="/logout" class="logout-img" style="overflow: hidden;"><img class="logout-img" src="{%static 'dashboard/logout.png'%}" alt="Logout"></a></div>
-            </div>
-        </div>
-        <div id="right-div">
-            <div class="lables">Dashboard</div>
-            <div id="ins-stats">
-                <!-- Over all Statistics divs -->
-                <div class="stats">
-                    <img src="{%static 'Rev.-Dr.-Dominic-Savio-SJ-St.-Xaviers-College-Autonomous-Kolkata.webp'%}" alt="Icon" class="stat-icon">
-                    <div class="stat-text">
-                        <div class="stat-value">{{underdash.total_students}}</div>
-                        <div class="stat-label">Total students</div>
-                    </div>
-                </div>
-                <!-- ######## -->
-                <div class="stats">
-                    <img src="{%static 'Rev.-Dr.-Dominic-Savio-SJ-St.-Xaviers-College-Autonomous-Kolkata.webp'%}" alt="Icon" class="stat-icon">
-                    <div class="stat-text">
-                        <div class="stat-value">{{underdash.total_groups}}</div>
-                        <div class="stat-label">Total groups</div>
-                    </div>
-                </div>
-                
-            </div>
-            <div id="survey-container" >
-                <div>Recent Surveys</div>
-                <div id="survey-list">
-                    {%for items in data %}
-                    <div class="survey-element" onclick=goToSurvey(this) data-sid="{{items.id}}"><div class="survey-text">{{items}}</div></div>
-                    {%endfor%}
-                </div>
-            </div>
-            <button type="submit" id="button-div" class="anim-button"  data-isPlaying="false" onclick="createSurveyButton()">Make new survey! <div class="circles"></div></button>
-        </div>
-        </div>
-</body>
-</html> {% endcomment %}
-
 <!DOCTYPE html>
 <html lang="en">
 {% load static%}
@@ -73,6 +7,7 @@
     <title>{{user.institute_name}}</title>
     <link rel="stylesheet" href="{%static 'dashboard/dashboard-style.css'%}">
 
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
     <script src="{%static 'dashboard/button-anim.js'%}" defer></script>
 
@@ -84,6 +19,15 @@
 </head>
 <body class="">
 
+    <style>
+        /* Custom CSS to make the button translucent */
+        .btnc-translucent {
+          background-color: rgba(0, 123, 255, 0.192); /* Adjust the RGBA values and opacity as needed */
+          border-color: rgba(0, 123, 255, 0.5); /* Use the same RGBA value for border color */
+          color: #fff; /* Text color */
+        }
+      </style>
+    
     <div id="master-div">
         <div id="left-div">
             <div class="m-4">
@@ -100,7 +44,7 @@
                 <div class="ins-info"><label >Institute id : </label><div id="no-of-surveys" >{{user.institute_name}}</div></div>
             </div>
             <div id="l-down">
-                <div id="logout" class="w-100 m-4"><a href="/logout" class="btn btn-primary w-100" ><i class="bi bi-box-arrow-right"></i></a>
+                <div id="logout" class="w-100 mt-3 p-3"><a href="/logout" class="btn btn-primary w-100" ><i class="bi bi-box-arrow-right"></i></a>
 
                     
                 </div>
@@ -108,85 +52,33 @@
         </div>
 
 
-        <!-- <div class="left-div mt-4 m-4">
-            <div class="wrapper">
-                <nav id="sidebar">
-                    <div class="sidebar-header">
-                        <h3>CAMPUS FLOW</h3>
-                    </div>
-                    <ul class="list-unstyled components">
-                        <p>success meets expectation </p>
-                        <li class="active">
-                            <a href="#homeSub" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                            <ul class="collapse list-unstyled" id="homeSub">
-                                <li>
-                                    <a href="#">Somethong</a>
-                                </li>
-                                <li>
-                                    <a href="#">Somethong</a>
-                                </li>
-                                <li>
-                                    <a href="#">Somethong</a>
-                                </li>
-                                <li>
-                                    <a href="#">Somethong</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-
-                </nav>
-
-
-                <div id="content">
-                    <nav class="navbar navbar-expand-lg navbar-light bg">
-                        <div class="container-fluid">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info">
-                                <i class="fas fa-aligned-left">
-                                </i>
-                                <span>Toggle sidebar</span>
-                            </button>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-
-        </div> -->
         <div id="right-div">
             <div class="lables">Dashboard</div>
-            
-            
-            <div class="container" bg-dark">
+            <div class="container ">
                 <div class="col-xl-5 col-lg-6">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="card widget-flat">
-                                <div class="card-body">
+                            <div class="card widget-flat btnc-translucent">
+                                <div class="card-body ">
                                     <div class="float-end">
                                         <i class="mdi mdi-account-multiple widget-icon"></i>
                                     </div>
-                                    <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Students</h5>
+                                    <h5 class="text-white fw-normal mt-0" title="Number of Customers">Students</h5>
                                     <h3 class="mt-3 mb-3 text-primary">{{underdash.total_students}}</h3>
-                                    <p class="mb-0 text-muted">
-                                        <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                        <span class="text-nowrap">Since last Survey</span>  
-                                    </p>
+    
                                 </div> <!-- end card-body-->
                             </div> <!-- end card-->
                         </div> <!-- end col-->
                 
-                        <div class="col-sm-6">
-                            <div class="card widget-flat">
+                        <div class="col-sm-6 ">
+                            <div class="card widget-flat btnc-translucent">
                                 <div class="card-body">
                                     <div class="float-end">
                                         <i class="mdi mdi-cart-plus widget-icon"></i>
                                     </div>
-                                    <h5 class="text-muted fw-normal mt-0" title="Number of groups">Total Groups</h5>
+                                    <h5 class="text-white fw-normal mt-0" title="Number of groups">Total Groups</h5>
                                     <h3 class="mt-3 mb-3 text-primary">{{underdash.total_groups}}</h3>
-                                    <p class="mb-0 text-muted">
-                                        <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                        <span class="text-nowrap">Since last month</span>
-                                    </p>
+                            
                                 </div> <!-- end card-body-->
                             </div> <!-- end card-->
                         </div> <!-- end col-->
@@ -197,17 +89,19 @@
                 </div>
 
             <div>
-                <h1>Recent Surveys Conducted</h1>
                 <br>
                 <br>
-                <div class="container shadow-lg p-3 mb-5 bg-light rounded">
+                <h3 class="labels">Recent Surveys Conducted</h3>
+                <br>
+                <br>
+                <div class="container shadow-lg p-3 mb-5 btnc-translucent rounded">
                     <div class="row">
                         {%for items in data %}
                         <div class="col-md-6 col-lg-3 mt-2">
                             
                             <div class="card ">
-                                <div class="card-block text-dark bg-light "  onclick="goToSurvey('')">
-                                    <a href="/institute-dashboard/analysis/{{items.id}}" class="btn btn-dark w-100 p-3"> <p>{{items}}</p></a>
+                                <div class="card-block text-dark bg-transparent "  onclick="goToSurvey('')">
+                                    <a href="#" class="btn btn-dark w-100 p-3"> <p>{{items}}</p></a>
                                 </div>
                             </div>
                             
@@ -220,6 +114,5 @@
             <button type="submit" id="button-div" class="anim-button"  data-isPlaying="false" onclick="createSurveyButton()">Make new survey! <div class="circles"></div></button>
         </div>
     </div>
-
 </body>
 </html>
