@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from authuser.models import Institute,Student,Survey,Question,SGroup,student_attending_survey,groups_table
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import ValidationError
+from django.core.exceptions import FieldError,ValidationError
 
 
 
@@ -73,6 +73,8 @@ class registerInstitute(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
     def save_model(self,request,obj,form,change):
         if not change:
+            if(Student.objects.filter(student_id=obj.institute_id).exists()):
+                raise FieldError("uid already exists in student table, choose a different one")
             obj.set_password(obj.password)
         obj.save()
     # Define which fields to display in the user list
@@ -88,6 +90,8 @@ class registerStudent(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
     def save_model(self,request,obj,form,change):
         if not change:
+            if(Institute.objects.filter(institute_id=obj.student_id).exists()):
+                raise FieldError("uid already exists in institute table, choose a different one")
             obj.set_password(obj.password)
         obj.save()
     # Define which fields to display in the user list

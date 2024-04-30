@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from surveyApp.views import loginpage,institute_dashboard,logoutUser,makesurvey,student_dashboard,answer_survey,get_groups,analysis
 
+admin.site.site_header = 'CampusFlow Administration'
+admin.site.site_title = "Administrator"
+admin.site.index_title = "Administration Dashboard"
 urlpatterns = [
     path('admin/get_groups/', get_groups, name='surveyApp_get_groups'),
     path('admin/', admin.site.urls),
