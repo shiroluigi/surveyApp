@@ -174,24 +174,50 @@ def analysis(request,sid):
     # get questions
     qo = Question.objects.filter(survey=so)
     survey_data = {}
+    sdd = {}
     data_inside = {}
     total_json = {}
+    totalresarray = {
+        "ch1" : 0,
+        "ch2" : 0,
+        "ch3" : 0,
+        "ch4" : 0,
+        "ch5" : 0
+    }
     total_responses = 0
-    # for all question 
+    # for 1 question 
     for q in qo:
         responses = []
+        totalresarray = {
+            "ch1" : 0,
+            "ch2" : 0,
+            "ch3" : 0,
+            "ch4" : 0,
+            "ch5" : 0
+        }
         student_ans = student_responses.objects.filter(survey=so,question=q)
         for sa in student_ans:
             responses.append(sa.choice)
+            if(sa.choice==1):
+                totalresarray['ch1'] += 1
+            elif(sa.choice==2):
+                totalresarray['ch2'] += 1
+            elif(sa.choice==3):
+                totalresarray['ch3'] +=1
+            elif(sa.choice==4):
+                totalresarray['ch4'] +=1
+            elif(sa.choice==5):
+                totalresarray['ch5'] +=1
             total_responses += 1
-        # print(responses)
         data_inside = {}
         data_inside['question_content'] = q.question
         data_inside['response'] = responses
+        data_inside['tra'] = totalresarray
         survey_data['{0}'.format(q.id)] = data_inside
+        
     # calculate percentage response
     # Create JSON of only question contents with response percentages
-    
+    print(survey_data)
     
     overall_satisfaction = calculate_overall_satisfaction(survey_data)
     # Calculate coefficients of impact for each question
@@ -239,9 +265,12 @@ def analysis(request,sid):
         }
         # Append JSON object to the list
         question_contents_with_percentages_json.append(question_json)
-
-    # # Print JSON of question contents with response percentages
-    # print("JSON containing question contents with response percentages:")
-    # print(json.dumps(question_contents_with_percentages_json, indent=4))
-    # print(question_contents_with_percentages_json)
-    return render(request,"report.html",{'resultO' : question_contents_with_percentages_json , 'resultS' : result_jsonS , 'div_values' : total_json })
+    # "question,1,2,3,4,5\nhow would u rate sd?,7,2,9,2,10\n"
+    csvstring = "question,1,2,3,4,5\n"
+    print(survey_data) 
+    for s in survey_data:
+        csvstring +=survey_data[s].get('question_content') + "," 
+        for a in survey_data[s].get('tra'):
+            csvstring += str(survey_data[s].get('tra')[a]) + ","
+        csvstring += "\n"
+    return render(request,"report.html",{'resultO' : question_contents_with_percentages_json , 'resultS' : result_jsonS , 'div_values' : total_json, 'cvstring':csvstring})
