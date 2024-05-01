@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from authuser.models import Institute, Student, Question, Survey, SGroup, student_attending_survey, groups_table, student_responses
@@ -19,10 +20,12 @@ def loginpage(request):
         user_id = request.POST.get('u-id')
         password = request.POST.get('u-pass')
         user = authenticate(request, username=user_id, password=password, backend='authuser.userauth.UserTypeAuthenticationBackend')
+        if(isinstance(user, User)):
+            return render(request, "login.html")
         print(user)
+
         if user is not None:
             login(request, user, backend='authuser.userauth.UserTypeAuthenticationBackend')
-            print("jeje")
             print(request.user)
             
             request.session['user_id'] = str(user.pk)
