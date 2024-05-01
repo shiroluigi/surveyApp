@@ -84,9 +84,14 @@
 
             <div class="modern-div full-height-width"><canvas id="importance-graph"></canvas></div>
         <!-- </span> -->
-            <button type="submit" id="button-div" class="anim-button"  data-isPlaying="false" onclick="exportPDF()">Export PDF<div class="circles"></div></button>
-        </div>
+        <div style="display: flex;gap:10%;">
+            <button type="submit" id="button-div" class="anim-button"  data-isPlaying="false" onclick="exportPDF()">Download PDF<div class="circles"></div></button>
+            <button type="submit" id="button-div" class="anim-button"  data-isPlaying="false" onclick="exportCSV()">Download CSV<div class="circles"></div></button>
+        </div>        
         <div id="jsonDiv" style="display:none;">{{resultS}}</div>
+        <div id="csv" style="display:none;">
+            {{cvstring}}
+        </div>
     <!-- </div> -->
     <script src="{% static 'analysis/render-graphs.js'%}" defer></script>
 </body>

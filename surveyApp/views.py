@@ -272,7 +272,7 @@ def analysis(request,sid):
     csvstring = "question,1,2,3,4,5\n"
     print(survey_data) 
     for s in survey_data:
-        csvstring +=survey_data[s].get('question_content') + "," 
+        csvstring +=survey_data[s].get('question_content').replace(",", "")+ "," 
         for a in survey_data[s].get('tra'):
             csvstring += str(survey_data[s].get('tra')[a]) + ","
         csvstring += "\n"
