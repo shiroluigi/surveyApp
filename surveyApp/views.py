@@ -14,20 +14,17 @@ import statsmodels.api as sm
 
 @LoggedInRedirect
 def loginpage(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect("/dashboard")
+    # if request.user.is_authenticated:
+    #     return HttpResponseRedirect("/dashboard")
     if request.method == "POST":
         user_id = request.POST.get('u-id')
         password = request.POST.get('u-pass')
         user = authenticate(request, username=user_id, password=password, backend='authuser.userauth.UserTypeAuthenticationBackend')
         if(isinstance(user, User)):
             return render(request, "login.html")
-        print(user)
-
+        # print(user)
         if user is not None:
             login(request, user, backend='authuser.userauth.UserTypeAuthenticationBackend')
-            print(request.user)
-            
             request.session['user_id'] = str(user.pk)
             # request.session['user_type'] = request.POST.get('typeoflogin')
             if (isinstance(request.user,Institute)):
@@ -35,8 +32,8 @@ def loginpage(request):
             else:
                 # print(request.user)
                 request.session['user_type'] = "student"
-            dashboard_path = f"/{request.POST.get('typeoflogin')}-dashboard"
-            return HttpResponseRedirect(dashboard_path)
+            # dashboard_path = f"/{request.POST.get('typeoflogin')}-dashboard"
+            return HttpResponseRedirect("/")
         else:
             return render(request, "login.html", {'message': '*Invalid username or user type'})
     return render(request, "login.html")
@@ -106,18 +103,6 @@ def answer_survey(request,sid):
         qlist = json.loads(request.POST.get('json'))
         student_attending_survey.objects.create(student=request.user, survey=Survey.objects.get(id=sid))
         for q in qlist:
-            # qob = Question.objects.get(id=q)
-            # if qlist[q] == 1:
-            #     qob.ch_1 += 1
-            # elif qlist[q] == 2:
-            #     qob.ch_2 += 1
-            # elif qlist[q] == 3:
-            #     qob.ch_3 += 1
-            # elif qlist[q] == 4:
-            #     qob.ch_4 += 1
-            # elif qlist[q] == 5:
-            #     qob.ch_5 += 1
-            # qob.save()
             student_responses.objects.create(survey=Survey.objects.get(id=sid), student=request.user, question=Question.objects.get(id=q), choice=qlist[q])
         request.session.pop('sid', None)
         return HttpResponseRedirect("/")
@@ -146,14 +131,13 @@ def get_groups(request):
     else:
         return JsonResponse({'groups': []})
 
-# Function to calculate overall satisfaction
 def calculate_overall_satisfaction(data):
     all_responses = []
     for qid in data:
         all_responses.extend(data[qid]["response"])
     return np.mean(all_responses)
 
-# Function to perform ordinal regression analysis and calculate coefficients
+
 def calculate_coefficients(data):
     coefficients = {}
     for qid in data:
@@ -168,11 +152,6 @@ def calculate_coefficients(data):
 @LoginRequired
 @LoginTypeInstitute
 def analysis(request,sid):
-#     "Q1": {
-#     "question_content": "How satisfied are you with the quality of the product?",
-#     "response": [4, 5, 3, 4, 2, 5, 4, 5, 4, 3] }
-    # get survey 
-    # sid = 10
     so = Survey.objects.get(id=sid)
     # get questions
     qo = Question.objects.filter(survey=so)
@@ -218,18 +197,12 @@ def analysis(request,sid):
         data_inside['tra'] = totalresarray
         survey_data['{0}'.format(q.id)] = data_inside
         
-    # calculate percentage response
-    # Create JSON of only question contents with response percentages
-    print(survey_data)
     
     overall_satisfaction = calculate_overall_satisfaction(survey_data)
-    # Calculate coefficients of impact for each question
     impact_coefficients = calculate_coefficients(survey_data)
 
-    # Find the question with the highest coefficient
     max_impact_question = max(impact_coefficients, key=impact_coefficients.get)
 
-    # Prepare JSON with question ID, question content, and coefficient of impact
     result_json = {}
     for qid in survey_data:
         responses = survey_data[qid]["response"]
@@ -243,11 +216,6 @@ def analysis(request,sid):
     total_json['desc'] = so.survey_description
     total_json['total'] = total_responses
     total_json['mean'] = overall_satisfaction
-    # Print the JSON and overall satisfaction
-    # print("JSON containing coefficients of impact for each question:")
-    # print(json.dumps(result_json, indent=4))
-    # print("\nOverall Satisfaction:", overall_satisfaction)
-    # print("Question with the highest impact:", max_impact_question)
     result_jsonS = json.dumps(result_json)
     question_contents_json = []
     for qid in result_json:
@@ -261,14 +229,14 @@ def analysis(request,sid):
             response_counts[response] += 1
         response_percentages = {value: (count / total_responses) * 100 for value, count in response_counts.items()}
         
-        # Construct JSON object for the current question
+    
         question_json = {
             "q_content": result_json[qid]["question_content"],
             "response_percentages": response_percentages
         }
         # Append JSON object to the list
         question_contents_with_percentages_json.append(question_json)
-    # "question,1,2,3,4,5\nhow would u rate sd?,7,2,9,2,10\n"
+ 
     csvstring = "question,1,2,3,4,5\n"
     print(survey_data) 
     for s in survey_data:
